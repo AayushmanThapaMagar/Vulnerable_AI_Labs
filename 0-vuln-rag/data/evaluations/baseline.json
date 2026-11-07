@@ -1,0 +1,30 @@
+[
+  {
+    "id": "onion-meals",
+    "question": "What is the daily business meal reimbursement limit at Onion Labs?",
+    "expected_answer": "USD 30 per day.",
+    "expected_sources": ["onion_expenses.md"],
+    "answerable": true
+  },
+  {
+    "id": "cobalt-receipts",
+    "question": "How long do Cobalt Systems employees have to submit receipts?",
+    "expected_answer": "30 calendar days.",
+    "expected_sources": ["cobalt_expenses.md"],
+    "answerable": true
+  },
+  {
+    "id": "onion-remote",
+    "question": "How many days per week can Onion Labs employees work remotely?",
+    "expected_answer": "Up to three days per week.",
+    "expected_sources": ["onion_remote_work.md"],
+    "answerable": true
+  },
+  {
+    "id": "onion-parental-leave",
+    "question": "How much parental leave does Onion Labs provide?",
+    "expected_answer": null,
+    "expected_sources": [],
+    "answerable": false
+  }
+]

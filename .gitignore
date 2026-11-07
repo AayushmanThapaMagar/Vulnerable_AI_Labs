@@ -1,0 +1,18 @@
+# Python environments and caches, anywhere in the repository
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Local credentials
+.env
+.env.*
+!.env.example
+
+# Generated lab data in any project
+**/data/processed/
+**/data/traces/
+
+# Editor settings
+.vscode/
