@@ -21,7 +21,7 @@ def normalize_rows(matrix):
     
     return matrix / lengths
 
-def retrieve(question, top_k = 3):
+def retrieve(question, top_k = 3, allowed_sources=None):
     if not question.strip():
         raise ValueError("The question must not be empty.")
     
@@ -47,6 +47,15 @@ def retrieve(question, top_k = 3):
     if index["task_type"] != "RETRIEVAL_DOCUMENT": 
         raise ValueError("Expected document retrieval embeddings.")
     
+    if allowed_sources is not None: 
+        chunks = [
+            chunk for chunk in chunks
+            if chunk["source"] in allowed_sources
+        ]
+        
+        if not chunks: 
+            return[]
+        
     document_vectors = np.array(
         [chunk["embedding"] for chunk in chunks],
         dtype = np.float64, 
