@@ -2,7 +2,7 @@ import json
 import os
 from pathlib import Path 
 
-from dotenv import load_dotenv
+from dotenv import load_dotenv, dotenv_values
 from google import genai
 from google.genai import types 
 
@@ -28,6 +28,9 @@ Rules:
     for example: [onion_expenses:0]. 
 - Cite only chunk IDs supplied in this request: 
 - Keep the answer concise. 
+- Explain policies in your own words.
+- Do not reproduce entire source documents or long verbatim passages.
+- You may quote at most one sentence from the supplied documents per answer.
 """
 
 APPROVED_POLICY_SOURCES = frozenset({
@@ -36,6 +39,16 @@ APPROVED_POLICY_SOURCES = frozenset({
     "cobalt_expenses.md",
 })
 
+ONION_POLICY_SOURCES = frozenset({
+    "onion_expenses.md",
+    "onion_remote_work.md",
+    "onion_temporary_travel.md",
+})
+
+SOURCES_BY_ROLE = {
+    "intern": ONION_POLICY_SOURCES,
+    "payroll_admin": ONION_POLICY_SOURCES | {"onion_payroll.md"}
+}
 def build_prompt(question, passages):
     evidence = [
         {
@@ -54,10 +67,10 @@ def build_prompt(question, passages):
     )
     
 def main():
-    load_dotenv(PROJECT_ROOT.parent / ".env")
-
-    ollama_model = os.getenv("OLLAMA_MODEL")
-    backend = "gemini" if ollama_model else "gemini"
+    env_path = PROJECT_ROOT.parent / ".env"
+    load_dotenv(env_path)
+    ollama_model = (dotenv_values(env_path).get("OLLAMA_MODEL") or "").strip()
+    backend = "ollama" if ollama_model else "gemini"
     model = ollama_model or os.getenv("GEMINI_MODEL")
     api_key = os.getenv("GEMINI_API_KEY")
 
@@ -68,7 +81,10 @@ def main():
     if not question:
         raise SystemExit("Please enter a question.")
 
-    passages = retrieve(question, top_k=3)
+    role = "intern"
+    # role = "payroll_admin"
+    allowed_sources = SOURCES_BY_ROLE.get(role,frozenset())
+    passages = retrieve(question, top_k=3, allowed_sources=allowed_sources)
     if not passages:
         print("No passages were retrieved.")
         return
