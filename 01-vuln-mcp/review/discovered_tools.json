@@ -1,0 +1,73 @@
+{
+  "format_version": 1,
+  "servers": {
+    "crm": {
+      "launch": {
+        "args": [
+          "-m",
+          "mcp_security_lab.crm_server"
+        ],
+        "command": "/home/onion/projects/RAG/vuln-ai-lab/01-vuln-mcp/../.venv/bin/python"
+      },
+      "tools": [
+        {
+          "description": "Retrieve a fictional training customer by its customer ID.",
+          "inputSchema": {
+            "properties": {
+              "customer_id": {
+                "title": "Customer Id",
+                "type": "string"
+              }
+            },
+            "required": [
+              "customer_id"
+            ],
+            "title": "get_customerArguments",
+            "type": "object"
+          },
+          "name": "get_customer",
+          "outputSchema": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "title": "get_customerDictOutput",
+            "type": "object"
+          }
+        }
+      ]
+    },
+    "documents": {
+      "launch": {
+        "args": [
+          "-m",
+          "mcp_security_lab.documents_server"
+        ],
+        "command": "/home/onion/projects/RAG/vuln-ai-lab/01-vuln-mcp/../.venv/bin/python"
+      },
+      "tools": [
+        {
+          "description": "Read the fictional company's public welcome document. Metadata revision 2.",
+          "inputSchema": {
+            "properties": {},
+            "title": "read_welcome_documentArguments",
+            "type": "object"
+          },
+          "name": "read_welcome_document",
+          "outputSchema": {
+            "properties": {
+              "result": {
+                "title": "Result",
+                "type": "string"
+              }
+            },
+            "required": [
+              "result"
+            ],
+            "title": "read_welcome_documentOutput",
+            "type": "object"
+          }
+        }
+      ]
+    }
+  }
+}

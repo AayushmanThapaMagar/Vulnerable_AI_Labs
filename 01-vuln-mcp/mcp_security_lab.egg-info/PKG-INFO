@@ -1,0 +1,58 @@
+Metadata-Version: 2.4
+Name: mcp-security-lab
+Version: 0.1.0
+Summary: A local security training lab for MCP-based applications
+Requires-Python: >=3.12
+Description-Content-Type: text/markdown
+Requires-Dist: mcp==2.3.0
+Provides-Extra: test
+Requires-Dist: pytest==9.2.0; extra == "test"
+
+# MCP Security Lab
+
+A deliberately vulnerable local application for learning security in
+MCP-based applications.
+
+## Planned components
+
+- Documents server: search and read fictional documents.
+- CRM server: retrieve synthetic customer records and update account notes.
+- Messaging server: record simulated outgoing messages.
+- Host application: connect to the servers and coordinate workflows.
+
+Development begins with direct MCP calls. Local model integration comes later.
+
+## Lab boundaries
+
+Use only synthetic records, harmless canaries, and disposable fixtures.
+Messages are recorded locally rather than delivered.
+
+Local processes are not an operating-system sandbox. Intentionally vulnerable
+code must not be pointed at real secrets, personal files, or production systems.
+
+## Environment
+
+This project uses the repository's root virtual environment.
+Its Python package is named `mcp_security_lab`.
+
+Dependency installation and usage instructions will be added as the
+corresponding components are implemented.
+
+## First direct MCP workflow
+
+From `01-vuln-mcp/`, using the repository's shared virtual environment:
+
+```bash
+../.venv/bin/python -m mcp_security_lab.direct_client
+```
+
+The client launches the Documents server over stdio, discovers its tools,
+and retrieves a fixed fictional welcome document. No model is involved.
+
+## Document fixtures
+
+The welcome tool reads `fixtures/documents/welcome.txt` as UTF-8 text.
+Its path is resolved relative to the server source location.
+
+The tool currently accepts no filename or path from the caller.
+Fixtures contain fictional training data only.

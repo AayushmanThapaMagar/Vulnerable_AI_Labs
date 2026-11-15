@@ -1,0 +1,1 @@
+"""Local MCP security training lab using synthetic data."""
