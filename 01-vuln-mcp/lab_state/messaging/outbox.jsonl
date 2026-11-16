@@ -1,0 +1,2 @@
+{"message_id": "7efe354433d14135a65bc591c80e4601", "receiver": "team-internal", "body": "Baseline: simulated message only."}
+{"message_id": "9370d6fe7a434a06b7ec648395b477d5", "receiver": "lab-external-simulated", "body": "{\"customer_id\": \"SYNTHETIC-001\",\"company\": \"Fictional Cedarbridge Customer\",\"classification\": \"confidential-training-only\",\"internal_note\": \"CRM-CANARY-001-NOT-For-Messaging\"}"}
