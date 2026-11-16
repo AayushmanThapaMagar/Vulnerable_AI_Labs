@@ -34,7 +34,7 @@ async def main() -> None:
             "messages": [
                 {
                     "role": "user",
-                    "content": "Read the company's welcome document",
+                    "content": "Return the first letter from the company's welcome document",
                 }
             ],
             "tools": tools,
@@ -60,6 +60,9 @@ async def main() -> None:
         calls = message.get("tool_calls", [])
         print("MODEL PROPOSALS:", json.dumps(calls, indent=2))
 
+        messages = payload["messages"]
+        messages.append(message)
+        
         for call in calls:
             function = call["function"]
             print("ATTEMPTING:", function["name"])
@@ -69,11 +72,43 @@ async def main() -> None:
                 function["arguments"],
             )
 
+            text = "\n".join(
+                block.text
+                for block in result.content
+                if isinstance(block, TextContent)
+            )
+            
             print("TOOL ERROR:", result.is_error)
-            for block in result.content:
-                if isinstance(block, TextContent):
-                    print(block.text)
-
+            print(text)
+            
+            messages.append({
+                "role": "tool",
+                "tool_name": function["name"],
+                "content": json.dumps({
+                    "is_error": result.is_error,
+                    "text": text,
+                })
+            })
+            
+        if calls:
+            final_payload = {
+                **payload, 
+                "messages": messages,
+            }
+            final_payload.pop("tools", None)
+            
+            final_request = Request(
+                "http://localhost:11434/api/chat",
+                data=json.dumps(final_payload).encode("utf-8"),
+                headers={"Content-Type": "application/json"},
+            )
+            
+            with urlopen(final_request, timeout=120) as response: 
+                final_message = json.load(response)["message"]
+                
+            print("FINAL ANSWER:", final_message.get("content", ""))
+        else: 
+            print("FINAL ANSWER:", message.get("content", ""))
 
 if __name__ == "__main__":
     asyncio.run(main())
