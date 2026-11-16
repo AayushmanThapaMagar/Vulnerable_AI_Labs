@@ -1,0 +1,5 @@
+{
+  "event": "server_started",
+  "synthetic_secret": "LAUNCH-CANARY-001",
+  "tool_called": false
+}
